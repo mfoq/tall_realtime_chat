@@ -45,4 +45,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /* Relationships */
+    public function conversation()
+    {
+        //هاي عشان اليوزر مربوط مع ب2 اي ديز مع الكونفيرزيشن
+        return $this->hasMany(Conversation::class, 'sender_id', 'id')
+            ->orWhere('receiver_id', $this->id);
+    }
 }
