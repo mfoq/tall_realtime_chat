@@ -6,11 +6,8 @@
             <div class="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
                 <div class="p-6">
                     <div class="flex justify-center">
-                        <img 
-                            class="w-24 h-24 rounded-full shadow-lg object-cover"
-                            src="{{ $user->avatar ?? 'https://placehold.co/200x200/' }}"
-                            alt="{{ $user->name }}'s profile"
-                        >
+                        <img class="w-24 h-24 rounded-full shadow-lg object-cover"
+                            src="{{ $user->avatar ?? 'https://placehold.co/200x200/' }}" alt="{{ $user->name }}'s profile">
                     </div>
                     <div class="text-center mt-4">
                         <h3 class="text-xl font-medium text-gray-900">
@@ -25,7 +22,7 @@
                                 Add Friend
                             </x-secondary-button>
 
-                            <x-primary-button>
+                            <x-primary-button wire:click="message({{ $user->id }})">
                                 Message
                             </x-primary-button>
                         </div>
