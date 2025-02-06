@@ -47,7 +47,7 @@ class User extends Authenticatable
     }
 
     /* Relationships */
-    public function conversation()
+    public function conversations()
     {
         //هاي عشان اليوزر مربوط مع ب2 اي ديز مع الكونفيرزيشن
         return $this->hasMany(Conversation::class, 'sender_id', 'id')
