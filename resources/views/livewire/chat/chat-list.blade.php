@@ -50,7 +50,7 @@
                 @foreach ($conversations as $conv)
                     <li
                         id="conversation-{{ $conv->id }}" wire:key="{{ $conv->id }}"
-                    class="py-3 hover:bg-gray-50 rounded-2xl dark:hover:bg-gray-100 transition-colors duration-150 flex gap-4 relative w-full cursor-pointer px-2 {{ $conv->id == $selectedConversation->id ? 'bg-slate-100':'' }}">
+                    class="py-3 hover:bg-gray-50 rounded-2xl dark:hover:bg-gray-100 transition-colors duration-150 flex gap-4 relative w-full cursor-pointer px-2 {{ $conv->id == $selectedConversation?->id ? 'bg-slate-100':'' }}">
                         <a href="#" class="shrink-0">
                             <x-avatar alt="Profile Image"/>
                         </a>

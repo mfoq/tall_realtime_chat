@@ -17,7 +17,7 @@
                     <x-avatar class="h-9 w-9 lg:w-11 lg:h-11" />
                 </div>
 
-                <h6 class="font-bold truncate">{{ fake()->name() }}</h6>
+                <h6 class="font-bold truncate">{{ $selectedConversation->getReceiver()->email }}</h6>
             </div>
         </header>
 
@@ -32,10 +32,10 @@
                 </div>
 
                 <div @class([
-        'flex flex-wrap text-[15px] rounded-xl p-2.5 flex flex-col text-black bg-[#f6f6f8fb]',
-        'rounded-bl-none border border-gray-200/40' => false,
-        'rounded-br-none bg-blue-500/80 text-white' => true,
-    ])>
+    'flex flex-wrap text-[15px] rounded-xl p-2.5 flex flex-col text-black bg-[#f6f6f8fb]',
+    'rounded-bl-none border border-gray-200/40' => false,
+    'rounded-br-none bg-blue-500/80 text-white' => true,
+])>
 
                     <p class="whitespace-normal truncate text-sm md:text-base tracking-wide lg:tracking-normal">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum corrupti culpa optio provident
@@ -45,10 +45,10 @@
 
                     <div class="ml-auto flex gap-2">
                         <p @class([
-        'text-xs',
-        'text-gray-500' => false,
-        'text-white' => true,
-    ])>
+    'text-xs',
+    'text-gray-500' => false,
+    'text-white' => true,
+])>
 
                             5:30 am
                         </p>
@@ -87,14 +87,11 @@
                     @csrf
 
                     <input type="hidden" autocomplete="false" style="display: none">
-                
+
                     <div class="grid grid-cols-12">
-                        <input type="text" autocomplete="off"
-                            autofocus
-                            placeholder="write your message here"
+                        <input type="text" autocomplete="off" autofocus placeholder="write your message here"
                             maxlength="1700"
-                            class="col-span-10 bg-gray-100 border-0 outline-0 focus:border-0 focus:ring-0 hover:ring-0 rounded-lg focus:outline-none"
-                        >
+                            class="col-span-10 bg-gray-100 border-0 outline-0 focus:border-0 focus:ring-0 hover:ring-0 rounded-lg focus:outline-none">
 
                         <button class="col-span-2" type="submit">
                             Send
