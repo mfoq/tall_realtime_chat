@@ -1,4 +1,13 @@
-<div class="w-full overflow-hidden">
+<div x-data="{height:0,conversationElement:document.getElementById('conversation')}"
+    x-init="
+        height=conversationElement.scrollHeight;
+        $nextTick(()=>conversationElement.scrollTop=height);
+    "
+    {{-- كستوم ايفنت انا ضفتها --}}
+    @scroll-bottom.window="
+        $nextTick(()=>conversationElement.scrollTop=height);
+    "
+    class="w-full overflow-hidden">
     <div class="border-b flex flex-col overflow-y-scroll grow h-full">
         {{-- header --}}
         <header class="w-full sticky inset-x-0 flex pb-[5xp] pt-[5px] top-0 z-10 bg-white border-b">
@@ -22,7 +31,7 @@
         </header>
 
         {{-- body --}}
-        <main
+        <main id="conversation"
             class="flex flex-col gap-3 p-2.5 overflow-y-auto flex-grow overscroll-contain overflow-x-hidden w-full my-auto">
             
             @if($loadedMessages)
@@ -56,30 +65,36 @@
     'text-white' => $message->sender_id === auth()->id(),
 ])>
 
-                            5:30 am
+                            {{ $message->created_at->format('g:i a') }}
                         </p>
 
                         {{-- message status, only show if message belongs auth --}}
-                        <div>
-                            {{-- double ticks --}}
-                            <span @class(['text-gray-500'])>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-check2-all" viewBox="0 0 16 16">
-                                    <path
-                                        d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0" />
-                                    <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708" />
-                                </svg>
-                            </span>
-
-                            {{-- single ticks --}}
-                            {{-- <span @class(['text-gray-500'])>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-check2" viewBox="0 0 16 16">
-                                    <path
-                                        d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
-                                </svg>
-                            </span> --}}
-                        </div>
+                        
+                        @if($message->sender_id === auth()->id())
+                            <div>
+                                {{-- double ticks --}}
+                                @if ($message->isRead)
+                                    <span @class(['text-gray-200'])>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                            class="bi bi-check2-all" viewBox="0 0 16 16">
+                                            <path
+                                                d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0" />
+                                            <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708" />
+                                        </svg>
+                                    </span>
+                                @else
+                                    {{-- single ticks --}}
+                                    <span @class(['text-gray-200'])>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                            class="bi bi-check2" viewBox="0 0 16 16">
+                                            <path
+                                                d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
+                                        </svg>
+                                    </span>
+                                @endif
+                                
+                            </div>
+                        @endif
                     </div>
                 </div>
 
@@ -109,7 +124,7 @@
                             maxlength="1700"
                             class="col-span-10 bg-gray-100 border-0 outline-0 focus:border-0 focus:ring-0 hover:ring-0 rounded-lg focus:outline-none">
 
-                        <button x-bind:disabled="!body.trim()" class="col-span-2" type="submit">
+                        <button x-bind:disabled="!body" class="col-span-2" type="submit">
                             Send
                         </button>
                     </div>

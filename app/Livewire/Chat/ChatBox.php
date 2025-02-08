@@ -37,6 +37,11 @@ class ChatBox extends Component
 
         $this->reset(['body']);
 
+        $this->dispatch('scroll-bottom'); //هاي الكستوم ايفنت اللي انا ضفتها بالالباين بالاليمينت
+
+        #push the message to the chat after safe it
+        $this->loadedMessages->push($createdMessage);
+
         // dd($createdMessage);
     }
 
