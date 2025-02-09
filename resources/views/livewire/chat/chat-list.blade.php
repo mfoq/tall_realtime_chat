@@ -50,7 +50,7 @@
                 @foreach ($conversations as $conv)
                     <li
                         id="conversation-{{ $conv->id }}" wire:key="{{ $conv->id }}"
-                    class="py-3 hover:bg-gray-50 rounded-2xl dark:hover:bg-gray-100 transition-colors duration-150 flex gap-4 relative w-full cursor-pointer px-2 {{ $conv->id == $selectedConversation?->id ? 'bg-slate-100':'' }}">
+                        class="py-3 hover:bg-gray-50 rounded-2xl dark:hover:bg-gray-100 transition-colors duration-150 flex gap-4 relative w-full cursor-pointer px-2 {{ $conv->id == $selectedConversation?->id ? 'bg-slate-100':'' }}">
                         <a href="#" class="shrink-0">
                             <x-avatar alt="Profile Image"/>
                         </a>
@@ -70,28 +70,35 @@
 
                                 {{-- Message body --}}
                                 <div class="flex gap-x-2 items-center">
-
-                                    {{-- double tick --}}
-                                    <span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-all" viewBox="0 0 16 16">
-                                            <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0"/>
-                                            <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708"/>
-                                        </svg>
-                                    </span>
-
-                                    {{-- single tick --}}
-                                    {{-- <span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-                                            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
-                                        </svg>
-                                    </span> --}}
+                                    @if ($conv->messages?->last()?->sender_id == auth()->id())
+                                        @if ($conv->isLastMessageReadByUser())
+                                            {{-- double tick --}}
+                                            <span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-all" viewBox="0 0 16 16">
+                                                    <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0"/>
+                                                    <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708"/>
+                                                </svg>
+                                            </span>
+                                        @else
+                                            {{-- single tick --}}
+                                            <span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+                                                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
+                                                </svg>
+                                            </span>
+                                        @endif
+                                    @endif
 
                                     <p class="grow truncate text-sm font-[100]">
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam ea aperiam laudantium distinctio architecto explicabo doloremque ducimus alias asperiores, perferendis eos tempore obcaecati dolores, ipsum dolorem maiores quidem corrupti eius.
+                                        {{ $conv->messages?->last()?->body ?? '' }} 
                                     </p>
 
                                     {{-- unread count --}}
-                                    <span class="font-bold p-px px-2 text-xs shring-0 rounded-full bg-blue-500 text-white">5</span>
+                                    @if($conv->unreadMessagesCount()>0)
+                                        <span class="font-bold p-px px-2 text-xs shring-0 rounded-full bg-blue-500 text-white">
+                                            {{ $conv->unreadMessagesCount() }}
+                                        </span>
+                                    @endif
                                 </div>
                             </a>
 

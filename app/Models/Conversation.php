@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Database\Eloquent\Model;
 
 class Conversation extends Model
@@ -25,5 +26,27 @@ class Conversation extends Model
         }else{
             return User::firstWhere('id', $this->sender_id);
         }
+    }
+
+    #mehtod to get if last message that i sent read by receiver or no
+    public function isLastMessageReadByUser():bool
+    {
+        $user = Auth()->User();
+        $lastMessage = $this->messages()->latest()->first();
+
+        if($lastMessage)
+        {
+            return $lastMessage->read_at !== null && $lastMessage->sender_id == $user->id;
+        }
+
+    }
+
+
+    #method to get the unread messages count
+    public function unreadMessagesCount(): int
+    {
+        return $unreadMessages = Message::where('conversation_id', $this->id)
+                                    ->where('receiver_id', auth()->id())
+                                    ->whereNull('read_at')->count();
     }
 }

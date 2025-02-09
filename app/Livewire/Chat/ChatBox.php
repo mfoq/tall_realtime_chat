@@ -10,16 +10,41 @@ class ChatBox extends Component
     public $selectedConversation;
     public $body;
     public $loadedMessages;
+    public $pagination_var = 10;#هاي ضفتها عشان بدي اعمل باجينيشن للمسجات عشان البيرفورمانس
+
+    protected $listeners = ['loadMore'];
 
     public function mount()
     {
         $this->loadedMessages();
     }
 
+    #used to load more messages (paginations)
+    public function loadMore() : void
+    {
+        #increment
+        $this->pagination_var += 10;
+
+        #call load messages
+        $this->loadedMessages();
+
+        #update the chat height
+        $this->dispatch('update-chat-height');
+
+    }
+
     public function loadedMessages()
     {
+        #get count 
+        $count = Message::where('conversation_id', $this->selectedConversation->id)->count();
+
+        #skip and query
         $this->loadedMessages = Message::where('conversation_id', $this->selectedConversation->id)
-        ->get();
+            ->skip($count - $this->pagination_var)
+            ->take($this->pagination_var)
+            ->get();
+
+        return $this->loadedMessages;
     }
 
     public function sendMessage()
@@ -42,7 +67,12 @@ class ChatBox extends Component
         #push the message to the chat after safe it
         $this->loadedMessages->push($createdMessage);
 
-        // dd($createdMessage);
+        #update the conversation (update_at) model to be current data
+        $this->selectedConversation->updated_at = now();
+        $this->selectedConversation->save();
+
+        #refresh chatList
+        $this->dispatch('chat-list:refresh');
     }
 
     public function render()

@@ -9,6 +9,8 @@ class ChatList extends Component
     public $selectedConversation;
     public $query;
 
+    protected $listeners = ['chat-list:refresh' => '$refresh'];
+
     public function render()
     {
         $user = auth()->user();
