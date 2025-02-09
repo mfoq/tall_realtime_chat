@@ -53,4 +53,13 @@ class User extends Authenticatable
         return $this->hasMany(Conversation::class, 'sender_id', 'id')
             ->orWhere('receiver_id', $this->id);
     }
+
+    /**
+     * هاي انا ضفتها عشان البرودكاستنج
+     * The channels the user receives notification broadcasts on.
+     */
+    public function receivesBroadcastNotificationsOn(): string
+    {
+        return 'users.'.$this->id;
+    }
 }
