@@ -13,7 +13,34 @@ class ChatBox extends Component
     public $loadedMessages;
     public $pagination_var = 10;#هاي ضفتها عشان بدي اعمل باجينيشن للمسجات عشان البيرفورمانس
 
-    protected $listeners = ['loadMore'];
+    #هاي مش كستوم ميقود هاي اشي موجود باللايف واير عادي
+    #انا ضفت اللي جواتها وجبت الايفنت الثانيه من البوشر لما ابعت مسج بتبين هناك بالديبج
+    #وعملناها زي دايناميك ايفنت بناءا على اليوزر اي دي
+    public function getListeners()
+    {
+        $auth_id= auth()->user()->id;
+
+        return [
+            'loadMore',
+            "echo-private:users.{$auth_id},.Illuminate\\Notifications\\Events\\BroadcastNotificationCreated" => 'broadcastedNotifications'
+        ];
+    }
+
+    public function broadcastedNotifications($event)
+    {
+        if($event['type'] == MessageSent::class)
+        {
+            if($event['conversation_id'] == $this->selectedConversation->id)
+            {
+                $this->dispatch('scroll-bottom');
+
+                $newMessage= Message::find($event['message_id']);
+
+                #push the message
+                $this->loadedMessages->push($newMessage);
+            }
+        }
+    }
 
     public function mount()
     {
