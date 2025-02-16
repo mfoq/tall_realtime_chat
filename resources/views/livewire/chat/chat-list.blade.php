@@ -2,12 +2,23 @@
     x-init="
         setTimeout(()=>{
             conversationElement = document.getElementById('conversation-'+query);
+
+            //scroll into the element(current chat opend in the caht box) in the chat list
             if(conversationElement)
             {
                 conversationElement.scrollIntoView({'behavior' : 'smooth'})
             }
 
-            }, 200)
+            }, 200);
+
+
+            Echo.private('users.{{ Auth()->User()->id }}')
+            .notification((notification)=>{
+                if(notification['type'] == 'App\\Notifications\\MessageRead' || notification['type'] == 'App\\Notifications\\MessageSent')
+                {
+                    Livewire.dispatch('chat-list:refresh'); //هاي راح ترفرش الكرنت كمبوننت اللي هو الشات ليست
+                }
+            });
     "
 
     class="flex flex-col transition-all h-full overflow-hidden">
