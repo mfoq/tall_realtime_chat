@@ -51,7 +51,8 @@ class User extends Authenticatable
     {
         //هاي عشان اليوزر مربوط مع ب2 اي ديز مع الكونفيرزيشن
         return $this->hasMany(Conversation::class, 'sender_id', 'id')
-            ->orWhere('receiver_id', $this->id);
+            ->orWhere('receiver_id', $this->id)
+            ->whereNotDeleted();
     }
 
     /**

@@ -137,7 +137,23 @@
                                                     View Profile
                                                 </button>
 
-                                                <button class="items-center gap-3 flex w-full px-4 py-2 text-letf text-sm leading-5 text-gray-500 hover:bg-gray-100 transition-all duration-150 ease-in-out focus:outline-none focus:bg-gray-100">
+
+                                                {{-- 
+                                                
+                                                    Why Use stopImmediatePropagation()?
+                                                        -If the user cancels the confirmation (false), the event is stopped before it can trigger any other JavaScript or Livewire event.
+                                                        -This prevents accidental deletions or unwanted side effects.
+
+                                                    encrypt :
+                                                        -استخدمناها عشان السكيوريتي عشان ما اسمح لليوزر يعرف الاي دي ويقدر يعدله ويحذف كونفيرزيشن مش اله
+                                                        -using Laravel's built-in encryption system.
+                                                    
+                                                --}}
+
+                                                <button 
+                                                    x-data="{ deleteItem() { if (confirm('Are you sure?')) { $wire.deleteByUser('{{ encrypt($conv->id) }}'); } } }"
+                                                    x-on:click="deleteItem"
+                                                    class="items-center gap-3 flex w-full px-4 py-2 text-letf text-sm leading-5 text-gray-500 hover:bg-gray-100 transition-all duration-150 ease-in-out focus:outline-none focus:bg-gray-100">
                                                     <span>
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>

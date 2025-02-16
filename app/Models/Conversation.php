@@ -17,7 +17,36 @@ class Conversation extends Model
         return $this->hasMany(Message::class);
     }
 
-    //method to retrieve the receiver if its the auth user or another user
+    #-------------Start Local Scopes--------------
+    
+    public function scopeWhereNotDeleted($query)
+    {   
+        $userId = auth()->id();
+
+        return $query->where(function($q) use($userId){
+
+            #where messages is not deleted
+            $q->whereHas('messages', function($q) use($userId){
+
+                $q->where(function($q) use($userId){
+
+                    $q->where('sender_id', $userId)
+                            ->whereNull('sender_deleted_at');
+                    })->orWhere(function($q) use ($userId){
+                        $q->where('receiver_id', $userId)
+                            ->whereNull('receiver_deleted_at');
+                    });
+                    
+            })
+                
+            #include conversations without messages
+            ->orWhereDoesntHave('messages');
+        });
+    }
+
+    #-------------End Local Scopes--------------
+
+    #method to retrieve the receiver if its the auth user or another user
     public function getReceiver()
     {
         if($this->sender_id === auth()->id())

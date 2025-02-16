@@ -12,7 +12,7 @@ class Message extends Model
         'receiver_id',
         'conversation_id',
         'read_at',
-        'receiver_delete_at',
+        'receiver_deleted_at',
         'sender_deleted_at',
     ];
 
