@@ -1,4 +1,8 @@
-<div x-data="{height:0,conversationElement:document.getElementById('conversation')}"
+<div x-data="{
+            height:0,
+            conversationElement:document.getElementById('conversation'),
+            markAsRead:null
+        }"
     x-init="
         height=conversationElement.scrollHeight;
         $nextTick(()=>conversationElement.scrollTop=height);
@@ -7,7 +11,7 @@
             .notification((notification)=>{
                 if(notification['type'] == 'App\\Notifications\\MessageRead' && notification['conversation_id'] == {{ $selectedConversation->id }})
                 {
-                    alert('feffffffffffffffffffffffffffffffffff');
+                    markAsRead: true
                 }
             });
     "
@@ -61,89 +65,90 @@
             
             @if($loadedMessages)
 
-            @php
-                $previousMessage = null;
-            @endphp
-
-            @foreach ($loadedMessages as $key=>$message)
-
-            {{-- keep track of previous message --}}
-            @if($key > 0)
                 @php
-                    $previousMessage = $loadedMessages->get($key-1);
+                    $previousMessage = null;
                 @endphp
-            @endif
 
-            <div 
-            wire:key='{{ time().$key }}'
-            @class([
-                'max-w-[85%] md:max-w-[78%] flex w-auto gap-2 relative mt-2',
-                'ml-auto' => $message->sender_id === auth()->id()
-                ])>
+                @foreach ($loadedMessages as $key=>$message)
 
-                {{-- avatar --}}
-                <div @class([
-                    'shrink-0',
-                    'invisible' => $previousMessage?->sender_id == $message->sender_id,
-                    'hidden' => $message->sender_id == auth()->id()
-                    ])>
-                    <x-avatar />
-                </div>
+                    {{-- keep track of previous message --}}
+                    @if($key > 0)
+                        @php
+                            $previousMessage = $loadedMessages->get($key-1);
+                        @endphp
+                    @endif
 
-                <div @class([
-    'flex flex-wrap text-[15px] rounded-xl p-2.5 flex flex-col text-black bg-[#f6f6f8fb]',
-    'rounded-bl-none border border-gray-200/40' => !($message->sender_id === auth()->id()),
-    'rounded-br-none bg-blue-500/80 text-white' => $message->sender_id === auth()->id(),
-])>
+                    <div 
+                    wire:key='{{ time().$key }}'
+                    @class([
+                        'max-w-[85%] md:max-w-[78%] flex w-auto gap-2 relative mt-2',
+                        'ml-auto' => $message->sender_id === auth()->id()
+                        ])>
 
-                    <p class="whitespace-normal truncate text-sm md:text-base tracking-wide lg:tracking-normal">
-                        {{ $message->body }}
-                    </p>
+                        {{-- avatar --}}
+                        <div @class([
+                            'shrink-0',
+                            'invisible' => $previousMessage?->sender_id == $message->sender_id,
+                            'hidden' => $message->sender_id == auth()->id()
+                            ])>
+                            <x-avatar />
+                        </div>
 
-                    <div class="ml-auto flex gap-2">
-                        <p @class([
-    'text-xs',
-    'text-gray-500' => !($message->sender_id === auth()->id()),
-    'text-white' => $message->sender_id === auth()->id(),
-])>
+                        <div @class([
+            'flex flex-wrap text-[15px] rounded-xl p-2.5 flex flex-col text-black bg-[#f6f6f8fb]',
+            'rounded-bl-none border border-gray-200/40' => !($message->sender_id === auth()->id()),
+            'rounded-br-none bg-blue-500/80 text-white' => $message->sender_id === auth()->id(),
+        ])>
 
-                            {{ $message->created_at->format('g:i a') }}
-                        </p>
+                            <p class="whitespace-normal truncate text-sm md:text-base tracking-wide lg:tracking-normal">
+                                {{ $message->body }}
+                            </p>
 
-                        {{-- message status, only show if message belongs auth --}}
-                        
-                        @if($message->sender_id === auth()->id())
-                            <div>
-                                {{-- double ticks --}}
-                                @if ($message->isRead)
-                                    <span @class(['text-gray-200'])>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                            class="bi bi-check2-all" viewBox="0 0 16 16">
-                                            <path
-                                                d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0" />
-                                            <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708" />
-                                        </svg>
-                                    </span>
-                                @else
-                                    {{-- single ticks --}}
-                                    <span @class(['text-gray-200'])>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                            class="bi bi-check2" viewBox="0 0 16 16">
-                                            <path
-                                                d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
-                                        </svg>
-                                    </span>
-                                @endif
+                            <div class="ml-auto flex gap-2">
+                                <p @class([
+            'text-xs',
+            'text-gray-500' => !($message->sender_id === auth()->id()),
+            'text-white' => $message->sender_id === auth()->id(),
+        ])>
+
+                                    {{ $message->created_at->format('g:i a') }}
+                                </p>
+
+                                {{-- message status, only show if message belongs auth --}}
                                 
+                                @if($message->sender_id === auth()->id())
+
+                                    {{-- الجيسون هاي بليد دايركتيف عشان اخذ داتا من البي اتش بي للالباين --}}
+                                    <div x-data="{markAsRead: @json($message->isRead)}">
+                                        
+                                        {{-- double ticks --}}
+                                        <span x-cloak x-show="markAsRead" @class(['text-gray-200'])>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                                class="bi bi-check2-all" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0" />
+                                                <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708" />
+                                            </svg>
+                                        </span>
+
+                                        {{-- single ticks --}}
+                                        <span x-show="!markAsRead" @class(['text-gray-200'])>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                                class="bi bi-check2" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
+                                            </svg>
+                                        </span>
+            
+                                    </div>
+                                @endif
                             </div>
-                        @endif
+                        </div>
+
                     </div>
-                </div>
 
-            </div>
-
-        @endforeach
-        @endif
+                @endforeach
+            @endif
         </main>
 
 

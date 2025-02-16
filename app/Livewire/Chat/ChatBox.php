@@ -23,7 +23,7 @@ class ChatBox extends Component
 
         return [
             'loadMore',
-            "echo-private:users.{$auth_id},.Illuminate\\Notifications\\Events\\BroadcastNotificationCreated" => 'broadcastedNotifications'
+            "echo-private:users.{$auth_id},.Illuminate\\Notifications\\Events\\BroadcastNotificationCreated" => 'broadcastedNotifications' // هاي الايفنت بتشتغل لما يكوم الريسيفر فاتح الشات بوكس وبتيجي من بوشر 
         ];
     }
 
@@ -102,7 +102,7 @@ class ChatBox extends Component
 
         $this->dispatch('scroll-bottom'); //هاي الكستوم ايفنت اللي انا ضفتها بالالباين بالاليمينت
 
-        #push the message to the chat after safe it
+        #push the message to the chat after save it
         $this->loadedMessages->push($createdMessage);
 
         #update the conversation (update_at) model to be current data
