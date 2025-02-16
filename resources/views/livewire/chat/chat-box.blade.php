@@ -71,6 +71,11 @@
 
                 @foreach ($loadedMessages as $key=>$message)
 
+                    {{-- hide the deleted messages if user delete the conversation --}}
+                    @if(($message->sender_id === auth()->id() && $message->sender_deleted_at != null) || ($message->receiver_id === auth()->id() && $message->receiver_deleted_at != null) )
+                        @continue
+                    @endif
+
                     {{-- keep track of previous message --}}
                     @if($key > 0)
                         @php
@@ -95,10 +100,10 @@
                         </div>
 
                         <div @class([
-            'flex flex-wrap text-[15px] rounded-xl p-2.5 flex flex-col text-black bg-[#f6f6f8fb]',
-            'rounded-bl-none border border-gray-200/40' => !($message->sender_id === auth()->id()),
-            'rounded-br-none bg-blue-500/80 text-white' => $message->sender_id === auth()->id(),
-        ])>
+                                    'flex flex-wrap text-[15px] rounded-xl p-2.5 flex flex-col text-black bg-[#f6f6f8fb]',
+                                    'rounded-bl-none border border-gray-200/40' => !($message->sender_id === auth()->id()),
+                                    'rounded-br-none bg-blue-500/80 text-white' => $message->sender_id === auth()->id(),
+                                ])>
 
                             <p class="whitespace-normal truncate text-sm md:text-base tracking-wide lg:tracking-normal">
                                 {{ $message->body }}
@@ -106,10 +111,10 @@
 
                             <div class="ml-auto flex gap-2">
                                 <p @class([
-            'text-xs',
-            'text-gray-500' => !($message->sender_id === auth()->id()),
-            'text-white' => $message->sender_id === auth()->id(),
-        ])>
+                                        'text-xs',
+                                        'text-gray-500' => !($message->sender_id === auth()->id()),
+                                        'text-white' => $message->sender_id === auth()->id(),
+                                    ])>
 
                                     {{ $message->created_at->format('g:i a') }}
                                 </p>
