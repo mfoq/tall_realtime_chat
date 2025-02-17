@@ -25,8 +25,8 @@ Ensure you have the following installed:
 ### Setup
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/your-repo/realtime-chat.git
-   cd realtime-chat
+   git@github.com:mfoq/tall_realtime_chat.git
+   cd tall_realtime_chat
    ```
 
 2. **Install dependencies:**
