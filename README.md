@@ -25,7 +25,7 @@ Ensure you have the following installed:
 ### Setup
 1. **Clone the repository:**
    ```sh
-   git@github.com:mfoq/tall_realtime_chat.git
+   git clone git@github.com:mfoq/tall_realtime_chat.git
    cd tall_realtime_chat
    ```
 
