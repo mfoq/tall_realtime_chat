@@ -67,7 +67,7 @@
                         </a>
 
                         <aside class="grid grid-cols-12 w-full">
-                            <a href="{{ route('chat', $conv) }}" class="col-span-11 border-b pb-2 border-gray-200 relative overflow-hidden truncate leading-5 w-full flex-nowrap p-1">
+                            <a href="{{ route('chat.show', $conv) }}" class="col-span-11 border-b pb-2 border-gray-200 relative overflow-hidden truncate leading-5 w-full flex-nowrap p-1">
                                 {{-- name and date --}}
                                 <div class="flex justify-between w-full items-center">
                                     <h6 class="truncate font-medium tracking-wider text-gray-900">

@@ -24,7 +24,7 @@ class Users extends Component
 
         if($existsingConversation)
         {
-            return redirect()->route('chat', ['query' => $existsingConversation->id]);
+            return redirect()->route('chat.show', ['query' => $existsingConversation->id]);
         }
 
         #create conversation
@@ -33,7 +33,7 @@ class Users extends Component
             'receiver_id' => $userId
         ]);
 
-        return redirect()->route('chat', ['query' => $createdConveration->id]);
+        return redirect()->route('chat.show', ['query' => $createdConveration->id]);
 
     }
     public function render()
