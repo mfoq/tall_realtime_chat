@@ -4,7 +4,7 @@ This is a simple real-time chat application built using Laravel 11, Livewire 3, 
 
 ## Features
 
-- **Real-time messaging** using Pusher and laravel echo.
+- **Real-time messaging** using Pusher and Laravel Echo.
 - **Livewire-powered UI** for dynamic, reactive updates.
 - **Read receipts** with single and double ticks.
 - **Queue processing** for handling background jobs efficiently.
@@ -41,10 +41,12 @@ Ensure you have the following installed:
    ```
    Update the `.env` file with your database and Pusher credentials:
    ```env
-   PUSHER_APP_ID=your-app-id
+   PUSHER_APP_ID=your-pusher-app-id
    PUSHER_APP_KEY=your-app-key
-   PUSHER_APP_SECRET=your-app-secret
-   PUSHER_APP_CLUSTER=your-cluster
+   PUSHER_APP_SECRET=your-secret
+   PUSHER_PORT=443
+   PUSHER_SCHEME=https
+   PUSHER_APP_CLUSTER="ap2" //cluster based on your pusher application
    BROADCAST_CONNECTION=pusher
    QUEUE_CONNECTION=database
    ```
